@@ -1,5 +1,8 @@
 part of 'download_cubit.dart';
 
+
+
+
 class FileManagerState extends Equatable {
   FileManagerState({
     required this.progress,

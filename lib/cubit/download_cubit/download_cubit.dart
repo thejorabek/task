@@ -7,6 +7,7 @@ import 'package:open_file_safe/open_file_safe.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:equatable/equatable.dart';
+import 'package:task/models/item_models.dart';
 
 part 'download_state.dart';
 
@@ -20,7 +21,7 @@ class FileManagerCubit extends Cubit<FileManagerState> {
         );
 
   void downloadIfExists({
-    required FileInfo fileInfo,
+    required ItemsModel fileInfo,
   }) async {
     bool hasPermission = await _requestWritePermission();
     if (!hasPermission) return;
@@ -29,7 +30,7 @@ class FileManagerCubit extends Cubit<FileManagerState> {
     print("PATH :${directory?.path}");
     String url = fileInfo.fileUrl;
     String newFileLocation =
-        "${directory?.path}/${fileInfo.fileName}${DateTime.now().millisecond}${url.substring(url.length - 5, url.length)}";
+        "${directory?.path}/${fileInfo.fileUrl}${DateTime.now().millisecond}${url.substring(url.length - 5, url.length)}";
     try {
       await dio.download(url, newFileLocation,
           onReceiveProgress: (received, total) {
