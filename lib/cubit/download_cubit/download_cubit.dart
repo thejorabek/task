@@ -21,7 +21,7 @@ class FileManagerCubit extends Cubit<FileManagerState> {
         );
 
   void downloadIfExists({
-    required ItemsModel fileInfo,
+    required ItemsModel itemsModel,
   }) async {
     bool hasPermission = await _requestWritePermission();
     if (!hasPermission) return;
@@ -32,13 +32,12 @@ class FileManagerCubit extends Cubit<FileManagerState> {
     String newFileLocation =
         "${directory?.path}/${fileInfo.fileUrl}${DateTime.now().millisecond}${url.substring(url.length - 5, url.length)}";
     try {
-      await dio.download(url, newFileLocation,
-          onReceiveProgress: (received, total) {
+      await dio.download(url, newFileLocation, onReceiveProgress: (received, total) {
         var pr = received / total;
         print(pr);
         emit(state.copyWith(progress: pr));
       });
-     emit(state.copyWith(newFileLocation: newFileLocation));
+      emit(state.copyWith(newFileLocation: newFileLocation));
     } catch (error) {
       debugPrint("DOWNLOAD ERROR:$error");
     }
@@ -55,8 +54,7 @@ class FileManagerCubit extends Cubit<FileManagerState> {
 
     // Userga ko'rinadigan path
     var directory = await getDownloadPath();
-    String newFileLocation =
-        "${directory?.path}/$fileName${url.substring(url.length - 5, url.length)}";
+    String newFileLocation = "${directory?.path}/$fileName${url.substring(url.length - 5, url.length)}";
     var allFiles = directory?.list();
 
     print("NEW FILE:$newFileLocation");
@@ -71,8 +69,7 @@ class FileManagerCubit extends Cubit<FileManagerState> {
       OpenFile.open(newFileLocation);
     } else {
       try {
-        await dio.download(url, newFileLocation,
-            onReceiveProgress: (received, total) {
+        await dio.download(url, newFileLocation, onReceiveProgress: (received, total) {
           double pr = received / total;
           emit(state.copyWith(progress: pr));
         });
