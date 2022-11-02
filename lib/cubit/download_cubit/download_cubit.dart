@@ -21,7 +21,7 @@ class FileManagerCubit extends Cubit<FileManagerState> {
         );
 
   void downloadIfExists({
-    required ItemsModel itemsModel,
+    required ItemsModel itemsModel, required fileInfo,
   }) async {
     bool hasPermission = await _requestWritePermission();
     if (!hasPermission) return;

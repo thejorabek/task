@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task/cubit/api_cubit/items_api_cubit.dart';
+import 'package:task/cubit/download_cubit/download_cubit.dart';
+import 'package:task/utils/notification_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     context.read<ItemsApiCubit>().fetchProducts();
 
     return Scaffold(
@@ -28,15 +29,17 @@ class HomePage extends StatelessWidget {
             return ListView(
               children: List.generate(
                 state.items.length,
-                (index) => GestureDetector(
-                  onTap: (){
-
+                (index) => ListTile(
+                  onTap: () {
+                    BlocProvider.of<FileManagerCubit>(context).downloadFile(fileName: state.items[index].name, url: state.items[index].fileUrl);
+                    LocalNotificationService.localNotificationService.showNotification(state.items[index].name, 'data qoshildi', index);
                   },
-                  child: ListTile(
-                    title: Text(state.items[index].name),
-                    subtitle: Text(state.items[index].price.toString()),
-                    trailing: IconButton(onPressed: () {  }, icon:  const Icon(Icons.shopping_basket_sharp),),
-                  )
+                  title: Text(state.items[index].name),
+                  subtitle: Text(state.items[index].price.toString()),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.shopping_basket_sharp),
+                  ),
                 ),
               ),
             );
