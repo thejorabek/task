@@ -21,15 +21,15 @@ class FileManagerCubit extends Cubit<FileManagerState> {
         );
 
   void downloadIfExists({
-    required ItemsModel fileInfo,
+    required ItemsModel itemsModel,
   }) async {
     bool hasPermission = await _requestWritePermission();
     if (!hasPermission) return;
     Dio dio = Dio();
     var directory = await getDownloadPath();
     print("PATH :${directory?.path}");
-    String url = fileInfo.fileUrl;
-    String newFileLocation = "${directory?.path}/${fileInfo.name}${DateTime.now().millisecond}${url.substring(url.length - 5, url.length)}";
+    String url = itemsModel.fileUrl;
+    String newFileLocation = "${directory?.path}/${itemsModel.name}${DateTime.now().millisecond}${url.substring(url.length - 5, url.length)}";
     try {
       await dio.download(url, newFileLocation, onReceiveProgress: (received, total) {
         var pr = received / total;
