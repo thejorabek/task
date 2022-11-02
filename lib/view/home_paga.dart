@@ -7,6 +7,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    context.read<ItemsApiCubit>().fetchProducts();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Items page'),
@@ -25,27 +28,20 @@ class HomePage extends StatelessWidget {
             return ListView(
               children: List.generate(
                 state.items.length,
-                (index) => Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 4,
-                            spreadRadius: 5,
-                            offset: const Offset(1, 3),
-                            color: Colors.grey.withOpacity(0.3))
-                      ]),
-                  child: Column(
-                    children: [
-                      Text(state.items[index].name),
-                      Text(state.items[index].price.toString()),
-                    ],
-                  ),
+                (index) => GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: ListTile(
+                    title: Text(state.items[index].name),
+                    subtitle: Text(state.items[index].price.toString()),
+                    trailing: IconButton(onPressed: () {  }, icon:  const Icon(Icons.shopping_basket_sharp),),
+                  )
                 ),
               ),
             );
           } else {
-            return const Text("error happened in bloc");
+            return const SizedBox();
           }
         },
       ),

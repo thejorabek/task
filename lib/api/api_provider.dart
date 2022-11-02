@@ -13,12 +13,13 @@ class ApiProvider {
     await apiClient.dio.get("${apiClient.dio.options.baseUrl}/data");
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      List<ItemsModel> items = (response.data as List?)
+      List<ItemsModel> items = (response.data['data'] as List?)
           ?.map((items) => ItemsModel.fromJson(items))
           .toList() ??
           [];
       return items;
     } else {
+      print("exeption");
       throw Exception();
     }
   }
